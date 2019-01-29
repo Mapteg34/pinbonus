@@ -43,6 +43,7 @@ services:
       MYSQL_DATABASE: ${DB_DATABASE:-laravel}
       MYSQL_USER: ${DB_USERNAME:-laravel}
       MYSQL_PASSWORD: ${DB_PASSWORD:-laravel}
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
 
 volumes:
   db_data:
