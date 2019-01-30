@@ -60,7 +60,7 @@ MySQL, то просим пояснить ваш выбор.
 
 2. make up
 
-3. http://<domain of your pc>/
+3. http://_domain_of_your_pc_/
 
 4. за деталями - смотри .env.default
 
