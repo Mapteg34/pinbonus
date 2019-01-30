@@ -8,16 +8,19 @@ import VueAxios from 'vue-axios';
 import App from './components/App.vue';
 
 import Home from './components/Home.vue';
-import Register from './components/Register.vue';
 import Login from './components/Login.vue';
-import Cabinets from './components/Cabinets.vue';
-import Cabinet from './components/Cabinet.vue';
+import Accounts from './components/Accounts.vue';
+import Account from './components/Account.vue';
+import Campaigns from './components/Campaigns.vue';
 import Campaign from './components/Campaign.vue';
+import Ads from './components/Ads.vue';
+
+window.alertify = require('alertifyjs');
 
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 
-axios.defaults.baseURL = $('meta[name=app-url]').attr('content')+'/api';
+axios.defaults.baseURL = $('meta[name=app-url]').attr('content') + '/api';
 
 const router = new VueRouter({
     routes: [
@@ -27,15 +30,6 @@ const router = new VueRouter({
             component: Home,
         },
 
-        {
-            path: '/register',
-            name: 'register',
-            component: Register,
-            meta: {
-                auth: false,
-                title: 'Регистрация',
-            }
-        },
         {
             path: '/login',
             name: 'login',
@@ -47,7 +41,25 @@ const router = new VueRouter({
         },
 
         {
-            path: '/cabinets/:cabinetId/:id',
+            path: '/ads/:accountId?/:campaignId?',
+            name: 'ads',
+            component: Ads,
+            meta: {
+                auth: true,
+                title: 'Объявления',
+            }
+        },
+        {
+            path: '/campaigns/:accountId?',
+            name: 'campaigns',
+            component: Campaigns,
+            meta: {
+                auth: true,
+                title: 'Кампании',
+            }
+        },
+        {
+            path: '/campaigns/:accountId/:campaignId',
             name: 'campaign',
             component: Campaign,
             meta: {
@@ -56,18 +68,18 @@ const router = new VueRouter({
             }
         },
         {
-            path: '/cabinets/:id',
-            name: 'cabinet',
-            component: Cabinet,
+            path: '/accounts/:accountId',
+            name: 'account',
+            component: Account,
             meta: {
                 auth: true,
                 title: 'Кабинет',
             }
         },
         {
-            path: '/cabinets',
-            name: 'cabinets',
-            component: Cabinets,
+            path: '/accounts',
+            name: 'accounts',
+            component: Accounts,
             meta: {
                 auth: true,
                 title: 'Кабинеты',

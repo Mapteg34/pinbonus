@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\VkTokenController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function() {
-    return view('spa');
-});
 
-Route::get(config('pinbonus.vkRedirectPath'), [VkTokenController::class, 'transmitCode']);
+    $params = [];
+    if (request()->has('code')) {
+        $params['vkCode'] = request()->get('code');
+    }
+
+    return view('spa', $params);
+});

@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\AdsController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CabinetsController;
-use App\Http\Controllers\VkTokenController;
+use App\Http\Controllers\AccountsController;
+use App\Http\Controllers\CampaignsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,18 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'guest:api'], function() {
-    Route::post('auth/login', [AuthController::class, 'login']);
-    Route::post('auth/register', [AuthController::class, 'register']);
-});
+Route::post('auth/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => 'jwt.auth'], function() {
     Route::get('auth/user', [AuthController::class, 'user']);
     Route::post('auth/logout', [AuthController::class, 'logout']);
-    Route::post('token', [VkTokenController::class, 'updateToken']);
-    Route::get('cabinets', [CabinetsController::class, 'index']);
-    Route::get('cabinets/{accountId}', [CabinetsController::class, 'showCabinet']);
-    Route::get('cabinets/{accountId}/{campaignId}', [CabinetsController::class, 'showCampaign']);
+    Route::get('accounts', [AccountsController::class, 'index']);
+    Route::get('accounts/{accountId}', [AccountsController::class, 'show']);
+    Route::get('campaigns/{accountId}', [CampaignsController::class, 'index']);
+    Route::get('campaigns/{accountId}/{campaignId}', [CampaignsController::class, 'show']);
+    Route::get('ads/{accountId}/{campaignId}', [AdsController::class, 'index']);
+    Route::patch('ads/{accountId}/{campaignId}/{adId}', [AdsController::class, 'update']);
+    Route::delete('ads/{accountId}/{campaignId}/{adId}', [AdsController::class, 'destroy']);
 });
 
 Route::group(['middleware' => 'jwt.refresh'], function() {

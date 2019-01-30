@@ -45,6 +45,10 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD:-laravel}
       MYSQL_RANDOM_ROOT_PASSWORD: 1
 
+  memcached:
+    image: memcached
+    restart: always
+
 volumes:
   db_data:
     driver: local

@@ -1,16 +1,14 @@
 <template>
-    <div>
-        <h1>Кампания</h1>
-        <vk-auth>
-            <p v-for="(val,key) in campaign">
-                <span class="text-info">{{ key }}</span>: {{ val }}
-            </p>
-        </vk-auth>
+    <div v-if="campaign" class="campaign-component">
+        <view-widget :element="campaign"></view-widget>
+        <h2>Список объявлений кампании</h2>
+        <ads-list :accountId="$route.params.accountId" :campaignId="campaign.id" :notDeleted="true"></ads-list>
     </div>
 </template>
 
 <script>
-    import VkAuth from './VkAuth';
+    import ViewWidget from './ViewWidget';
+    import AdsList from './AdsList';
     
     export default {
         data() {
@@ -19,16 +17,17 @@
             }
         },
         components: {
-            VkAuth,
+            ViewWidget,
+            AdsList,
         },
         mounted() {
             let app = this;
             this.$http.get(
-                `cabinets/${app.$route.params.cabinetId}/${app.$route.params.id}`
+                `campaigns/${app.$route.params.accountId}/${app.$route.params.campaignId}`
             ).then(function (resp) {
                 app.campaign = resp.data.campaign;
-            }, function (resp) {
-                alert('Ошибка при получении кампании')
+            }, function () {
+                window.alertify.error('Ошибка при получении кампании');
             });
         },
     }

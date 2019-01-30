@@ -14,9 +14,9 @@ class VkApiServiceProvider extends ServiceProvider
     {
         $this->app->bind(VkOauthService::class, function() {
             return new VkOauthService(
-                config('app.url').config('pinbonus.vkRedirectPath'),
+                config('app.url').'/#/login',
                 config('pinbonus.vk_app_id'),
-                config('pinbonus.vk_secret'),
+                config('pinbonus.vk_secret')
             );
         });
         $this->app->bind(VkApiService::class, function() {
@@ -25,11 +25,9 @@ class VkApiServiceProvider extends ServiceProvider
             if (empty($user)) {
                 throw new \Exception('only authorized can work with api');
             }
-            if (empty($user->vk_id) || empty($user->vk_token)) {
-                throw new \Exception('user vk data empty');
-            }
+
             return new VkApiService(
-                $user->vk_token
+                $user->access_token
             );
         });
     }

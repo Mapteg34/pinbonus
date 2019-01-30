@@ -9,14 +9,17 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 /**
  * Class User
  *
- * @property string $login
- * @property string $password
- * @property string $vk_token
- * @property string $vk_id
+ * @property int $id
+ * @property string $access_token
+ * @property string $name
+ * @property string $photo
+ * @property-read AdDesc[] $adDescs
+ * @property-read RemovedAd[] $removedAds
  *
  * @package App
  *
  * @mixin \Illuminate\Database\Eloquent\Model
+ * @method static find($user_id)
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -28,8 +31,10 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'login',
-        'password',
+        'id',
+        'access_token',
+        'name',
+        'photo',
     ];
 
     /**
@@ -38,7 +43,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password',
+        'access_token',
         'remember_token',
     ];
 
@@ -60,5 +65,21 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function adDescs()
+    {
+        return $this->hasMany(AdDesc::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function removedAds()
+    {
+        return $this->hasMany(RemovedAd::class);
     }
 }

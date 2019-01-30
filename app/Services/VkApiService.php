@@ -98,4 +98,25 @@ class VkApiService
             ])
         )->keyBy('id');
     }
+
+    /**
+     * @param array $userIds
+     * @param array $fields
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws \Exception
+     */
+    public function usersGet(array $userIds, array $fields = null)
+    {
+        $params = [
+            'user_ids' => $userIds
+        ];
+        if ($fields !== null) {
+            $params['fields'] = implode(',', $fields);
+        }
+
+        return collect(
+            $this->post('users.get', $params)
+        )->keyBy('id');
+    }
 }

@@ -1,60 +1,41 @@
 <template>
-    <form autocomplete="off" @submit.prevent="submit" method="post">
-        <p class="alert alert-danger" v-if="errors">
-            Не удалось войти в систему. Исправьте ошибки ниже и повторите попытку.
-        </p>
-        <div class="form-group">
-            <label for="login">Login</label>
-            <input type="text" id="login" class="form-control" v-model="login" required>
-            <invalid-feedback :errors="errors.login"></invalid-feedback>
-        </div>
-        <div class="form-group">
-            <label for="password">Пароль</label>
-            <input type="password" id="password" class="form-control" v-model="password" required>
-            <invalid-feedback :errors="errors.password"></invalid-feedback>
-        </div>
-        <div class="d-flex">
-            <button type="submit" class="btn btn-success">Войти</button>
-            <p class="p-2 m-0">
-                <router-link :to="{ name: 'register' }">Регистрация</router-link>
-            </p>
-        </div>
-    </form>
+    <a class="btn btn-success" v-bind:href="authHref">Войти через вк</a>
 </template>
 
 <script>
-    import InvalidFeedback from './InvalidFeedback.vue';
-    
     export default {
         data() {
             return {
-                login: null,
-                password: null,
-                errors: false,
-            }
+                authHref: 'https://oauth.vk.com/authorize?' + $.param({
+                    client_id: $('meta[name=vk_app_id]').attr('content'),
+                    display: 'popup',
+                    scope: 'offline,ads',
+                    response_type: 'code',
+                    v: '5.92',
+                    redirect_uri: $('meta[name=app-url]').attr('content') + '/#/login',
+                }),
+            };
         },
-        
-        methods: {
-            submit() {
-                this.errors = false;
-                let app = this;
+        mounted() {
+            let $codeMeta = $('meta[name=vk_code]');
+            if ($codeMeta.length > 0) {
                 this.$auth.login({
                     params: {
-                        login: app.login,
-                        password: app.password
+                        code: $codeMeta.attr('content'),
                     },
                     success: function () {
+                        window.alertify.error('Добро пожаловать');
+                        // TODO: remove redirect, add vue-router soft-redirect
+                        window.location.href = '/#accounts';
                     },
                     error: function () {
+                        window.alertify.error('Не удалось войти в систему')
                     },
                     rememberMe: true,
                     redirect: '/',
                     fetchUser: true,
                 });
-            },
-        },
-        components: {
-            InvalidFeedback,
+            }
         },
     }
 </script>

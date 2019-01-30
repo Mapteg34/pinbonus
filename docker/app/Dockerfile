@@ -14,7 +14,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends apt-utils
 
 # pdo_pgsql
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libpq-dev && \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        libpq-dev \
+        zlib1g-dev \
+        libmemcached-dev \
+    && \
     docker-php-ext-install -j$(nproc) pdo_mysql && \
     docker-php-ext-enable pdo_mysql
 
@@ -31,6 +35,10 @@ RUN apt-get install -y git && \
     chown www-data:www-data /var/log/xdebug_remote.log && \
     cd / && \
     rm -Rf /tmp/xdebug
+
+RUN        pecl install memcached \
+        && docker-php-ext-enable memcached \
+;
 
 #use mailer !
 RUN    echo "#!/bin/sh\n/bin/true" > /usr/bin/fake_mail.sh \
