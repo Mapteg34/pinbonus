@@ -58,7 +58,9 @@ MySQL, то просим пояснить ваш выбор.
 
 1. git clone
 
-2. make up
+2. composer install && nvm use 9 && npm install && npm run prod
+
+3. make up
 
 3. http://_domain_of_your_pc_/
 
